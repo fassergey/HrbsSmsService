@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BotStorageModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="LoweredUserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="MobileAlias" Type="nvarchar" MaxLength="16" />
+          <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+          <Property Name="LastActivityDate" Type="datetime" Nullable="false" />
+          <Property Name="AllowedBotBets" Type="bit" Nullable="false" />
+          <Property Name="Currency" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="20" />
+          <Property Name="SendSms" Type="bit" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SMSNoticeSettings">
+          <Key>
+            <PropertyRef Name="NoticeSettingsId" />
+          </Key>
+          <Property Name="NoticeSettingsId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="SMSCount" Type="tinyint" Nullable="false" />
+          <Property Name="FirstSendTime" Type="tinyint" Nullable="false" />
+          <Property Name="SecondSendTime" Type="tinyint" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="EndTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="AllowToEraseDailyData" Type="bit" Nullable="false" />
+          <Property Name="FirstSmsTimeDeviation" Type="tinyint" Nullable="false" />
+          <Property Name="SecondSmsTimeDeviation" Type="tinyint" Nullable="false" />
+          <Property Name="SmsText" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DutyAdminPhone" Type="varchar" MaxLength="20" />
+          <Property Name="DeveloperPhone" Type="varchar" MaxLength="20" />
+          <Property Name="FlagServiceErrorSmsSent" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SMSSendingQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TimeFirstSmsSent" Type="time" Precision="7" />
+          <Property Name="TimeSecondSmsSent" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="SMSUserDayStatistic">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MessageCount" Type="tinyint" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SMSSendingQueue_aspnet_Users">
+          <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
+          <End Role="SMSSendingQueue" Type="Self.SMSSendingQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SMSSendingQueue">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SMSUserDayStatistic_aspnet_Users">
+          <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
+          <End Role="SMSUserDayStatistic" Type="Self.SMSUserDayStatistic" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SMSUserDayStatistic">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BotStorageModelStoreContainer">
+          <EntitySet Name="aspnet_Users" EntityType="Self.aspnet_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSNoticeSettings" EntityType="Self.SMSNoticeSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSSendingQueue" EntityType="Self.SMSSendingQueue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSUserDayStatistic" EntityType="Self.SMSUserDayStatistic" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SMSSendingQueue_aspnet_Users" Association="Self.FK_SMSSendingQueue_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="SMSSendingQueue" EntitySet="SMSSendingQueue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SMSUserDayStatistic_aspnet_Users" Association="Self.FK_SMSUserDayStatistic_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="SMSUserDayStatistic" EntitySet="SMSUserDayStatistic" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BotStorageModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SMSNoticeSettings">
+          <Key>
+            <PropertyRef Name="NoticeSettingsId" />
+          </Key>
+          <Property Name="NoticeSettingsId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="SMSCount" Type="Byte" Nullable="false" />
+          <Property Name="FirstSendTime" Type="Byte" Nullable="false" />
+          <Property Name="SecondSendTime" Type="Byte" Nullable="false" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="AllowToEraseDailyData" Type="Boolean" Nullable="false" />
+          <Property Name="FirstSmsTimeDeviation" Type="Byte" Nullable="false" />
+          <Property Name="SecondSmsTimeDeviation" Type="Byte" Nullable="false" />
+          <Property Name="SmsText" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DutyAdminPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DeveloperPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FlagServiceErrorSmsSent" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SMSUserDayStatistic">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="MessageCount" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="aspnet_Users" Relationship="BotStorageModel.FK_SMSUserDayStatistic_aspnet_Users" FromRole="SMSUserDayStatistic" ToRole="aspnet_Users" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityContainer Name="BotStorageEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SMSNoticeSettings" EntityType="Self.SMSNoticeSettings" />
+          <EntitySet Name="SMSUserDayStatistic" EntityType="Self.SMSUserDayStatistic" />
+          <EntitySet Name="SMSSendingQueue" EntityType="BotStorageModel.SMSSendingQueue" />
+          <EntitySet Name="aspnet_Users" EntityType="BotStorageModel.aspnet_Users" />
+          <AssociationSet Name="FK_SMSSendingQueue_aspnet_Users" Association="BotStorageModel.FK_SMSSendingQueue_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="SMSSendingQueue" EntitySet="SMSSendingQueue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SMSUserDayStatistic_aspnet_Users" Association="BotStorageModel.FK_SMSUserDayStatistic_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="SMSUserDayStatistic" EntitySet="SMSUserDayStatistic" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SMSSendingQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="TimeFirstSmsSent" Type="Time" Precision="7" />
+          <Property Name="TimeSecondSmsSent" Type="Time" Precision="7" />
+          <NavigationProperty Name="aspnet_Users" Relationship="BotStorageModel.FK_SMSSendingQueue_aspnet_Users" FromRole="SMSSendingQueue" ToRole="aspnet_Users" />
+        </EntityType>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="LoweredUserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="MobileAlias" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+          <Property Name="LastActivityDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AllowedBotBets" Type="Boolean" Nullable="false" />
+          <Property Name="Currency" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SMSSendingQueue" Relationship="BotStorageModel.FK_SMSSendingQueue_aspnet_Users" FromRole="aspnet_Users" ToRole="SMSSendingQueue" />
+          <NavigationProperty Name="SMSUserDayStatistic" Relationship="BotStorageModel.FK_SMSUserDayStatistic_aspnet_Users" FromRole="aspnet_Users" ToRole="SMSUserDayStatistic" />
+          <Property Name="SendSms" Type="Boolean" Nullable="false" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+        </EntityType>
+        <Association Name="FK_SMSSendingQueue_aspnet_Users">
+          <End Type="BotStorageModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
+          <End Type="BotStorageModel.SMSSendingQueue" Role="SMSSendingQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SMSSendingQueue">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SMSUserDayStatistic_aspnet_Users">
+          <End Type="BotStorageModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
+          <End Type="BotStorageModel.SMSUserDayStatistic" Role="SMSUserDayStatistic" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SMSUserDayStatistic">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BotStorageModelStoreContainer" CdmEntityContainer="BotStorageEntities">
+          <EntitySetMapping Name="SMSNoticeSettings">
+            <EntityTypeMapping TypeName="BotStorageModel.SMSNoticeSettings">
+              <MappingFragment StoreEntitySet="SMSNoticeSettings">
+                <ScalarProperty Name="FlagServiceErrorSmsSent" ColumnName="FlagServiceErrorSmsSent" />
+                <ScalarProperty Name="DeveloperPhone" ColumnName="DeveloperPhone" />
+                <ScalarProperty Name="DutyAdminPhone" ColumnName="DutyAdminPhone" />
+                <ScalarProperty Name="SmsText" ColumnName="SmsText" />
+                <ScalarProperty Name="SecondSmsTimeDeviation" ColumnName="SecondSmsTimeDeviation" />
+                <ScalarProperty Name="FirstSmsTimeDeviation" ColumnName="FirstSmsTimeDeviation" />
+                <ScalarProperty Name="AllowToEraseDailyData" ColumnName="AllowToEraseDailyData" />
+                <ScalarProperty Name="NoticeSettingsId" ColumnName="NoticeSettingsId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="SMSCount" ColumnName="SMSCount" />
+                <ScalarProperty Name="FirstSendTime" ColumnName="FirstSendTime" />
+                <ScalarProperty Name="SecondSendTime" ColumnName="SecondSendTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSUserDayStatistic">
+            <EntityTypeMapping TypeName="BotStorageModel.SMSUserDayStatistic">
+              <MappingFragment StoreEntitySet="SMSUserDayStatistic">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="MessageCount" ColumnName="MessageCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSSendingQueue">
+            <EntityTypeMapping TypeName="BotStorageModel.SMSSendingQueue">
+              <MappingFragment StoreEntitySet="SMSSendingQueue">
+                <ScalarProperty Name="TimeSecondSmsSent" ColumnName="TimeSecondSmsSent" />
+                <ScalarProperty Name="TimeFirstSmsSent" ColumnName="TimeFirstSmsSent" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="aspnet_Users">
+            <EntityTypeMapping TypeName="BotStorageModel.aspnet_Users">
+              <MappingFragment StoreEntitySet="aspnet_Users">
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="SendSms" ColumnName="SendSms" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="AllowedBotBets" ColumnName="AllowedBotBets" />
+                <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+                <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+                <ScalarProperty Name="MobileAlias" ColumnName="MobileAlias" />
+                <ScalarProperty Name="LoweredUserName" ColumnName="LoweredUserName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
